@@ -25,6 +25,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tandem.emt.features.incidentlist.IncidentListViewModel
+import com.tandem.emt.features.incidentlist.IncidentRepositoryImpl
+import com.tandem.emt.features.incidentlist.ui.IncidentListScreen
 import kotlinx.serialization.Serializable
 
 @Serializable object IncidentsRoute
@@ -81,7 +85,15 @@ fun AppNavigation() {
             startDestination = IncidentsRoute,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable<IncidentsRoute> { PlaceholderScreen("Incidents") }
+            composable<IncidentsRoute> {
+                val viewModel: IncidentListViewModel = viewModel {
+                    IncidentListViewModel(IncidentRepositoryImpl())
+                }
+                IncidentListScreen(
+                    viewModel = viewModel,
+                    onIncidentClick = { /* TODO: navigate to detail */ }
+                )
+            }
             composable<MapRoute> { PlaceholderScreen("Map") }
             composable<ChatRoute> { PlaceholderScreen("Chat") }
             composable<SettingsRoute> { PlaceholderScreen("Settings") }

@@ -14,6 +14,14 @@
 		A10000010000000000000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000005 /* Assets.xcassets */; };
 		A10000010000000000000010 /* TandemEMTTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000010 /* TandemEMTTests.swift */; };
 		A10000010000000000000020 /* TandemEMTUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000020 /* TandemEMTUITests.swift */; };
+		A10000010000000000000101 /* IncidentModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000101 /* IncidentModels.swift */; };
+		A10000010000000000000102 /* IncidentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000102 /* IncidentRepository.swift */; };
+		A10000010000000000000103 /* IncidentListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000103 /* IncidentListViewModel.swift */; };
+		A10000010000000000000104 /* FilterChipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000104 /* FilterChipView.swift */; };
+		A10000010000000000000105 /* IncidentCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000105 /* IncidentCardView.swift */; };
+		A10000010000000000000106 /* IncidentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000106 /* IncidentListView.swift */; };
+		A10000010000000000000110 /* IncidentListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000110 /* IncidentListViewModelTests.swift */; };
+		A10000010000000000000120 /* IncidentListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000120 /* IncidentListUITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +52,14 @@
 		A20000010000000000000011 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A20000010000000000000020 /* TandemEMTUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TandemEMTUITests.swift; sourceTree = "<group>"; };
 		A20000010000000000000021 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A20000010000000000000101 /* IncidentModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentModels.swift; sourceTree = "<group>"; };
+		A20000010000000000000102 /* IncidentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentRepository.swift; sourceTree = "<group>"; };
+		A20000010000000000000103 /* IncidentListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentListViewModel.swift; sourceTree = "<group>"; };
+		A20000010000000000000104 /* FilterChipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterChipView.swift; sourceTree = "<group>"; };
+		A20000010000000000000105 /* IncidentCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentCardView.swift; sourceTree = "<group>"; };
+		A20000010000000000000106 /* IncidentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentListView.swift; sourceTree = "<group>"; };
+		A20000010000000000000110 /* IncidentListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentListViewModelTests.swift; sourceTree = "<group>"; };
+		A20000010000000000000120 /* IncidentListUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentListUITests.swift; sourceTree = "<group>"; };
 		A60000010000000000000001 /* TandemEMT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TandemEMT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A60000010000000000000002 /* TandemEMTTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TandemEMTTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A60000010000000000000003 /* TandemEMTUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TandemEMTUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -158,8 +174,46 @@
 		A80000010000000000000009 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				A80000010000000000000040 /* IncidentList */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		A80000010000000000000040 /* IncidentList */ = {
+			isa = PBXGroup;
+			children = (
+				A80000010000000000000041 /* Models */,
+				A80000010000000000000042 /* ViewModels */,
+				A80000010000000000000043 /* Views */,
+				A20000010000000000000102 /* IncidentRepository.swift */,
+			);
+			path = IncidentList;
+			sourceTree = "<group>";
+		};
+		A80000010000000000000041 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000101 /* IncidentModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A80000010000000000000042 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000103 /* IncidentListViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A80000010000000000000043 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000104 /* FilterChipView.swift */,
+				A20000010000000000000105 /* IncidentCardView.swift */,
+				A20000010000000000000106 /* IncidentListView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		A80000010000000000000008 /* Resources */ = {
@@ -176,8 +230,17 @@
 			children = (
 				A20000010000000000000010 /* TandemEMTTests.swift */,
 				A20000010000000000000011 /* Info.plist */,
+				A80000010000000000000050 /* IncidentListTests */,
 			);
 			path = TandemEMTTests;
+			sourceTree = "<group>";
+		};
+		A80000010000000000000050 /* IncidentListTests */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000110 /* IncidentListViewModelTests.swift */,
+			);
+			path = IncidentListTests;
 			sourceTree = "<group>";
 		};
 		A80000010000000000000020 /* TandemEMTUITests */ = {
@@ -185,6 +248,7 @@
 			children = (
 				A20000010000000000000020 /* TandemEMTUITests.swift */,
 				A20000010000000000000021 /* Info.plist */,
+				A20000010000000000000120 /* IncidentListUITests.swift */,
 			);
 			path = TandemEMTUITests;
 			sourceTree = "<group>";
@@ -306,6 +370,12 @@
 				A10000010000000000000002 /* ContentView.swift in Sources */,
 				A10000010000000000000003 /* AppRouter.swift in Sources */,
 				A10000010000000000000004 /* APIClient.swift in Sources */,
+				A10000010000000000000101 /* IncidentModels.swift in Sources */,
+				A10000010000000000000102 /* IncidentRepository.swift in Sources */,
+				A10000010000000000000103 /* IncidentListViewModel.swift in Sources */,
+				A10000010000000000000104 /* FilterChipView.swift in Sources */,
+				A10000010000000000000105 /* IncidentCardView.swift in Sources */,
+				A10000010000000000000106 /* IncidentListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,6 +384,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10000010000000000000010 /* TandemEMTTests.swift in Sources */,
+				A10000010000000000000110 /* IncidentListViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,6 +393,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10000010000000000000020 /* TandemEMTUITests.swift in Sources */,
+				A10000010000000000000120 /* IncidentListUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

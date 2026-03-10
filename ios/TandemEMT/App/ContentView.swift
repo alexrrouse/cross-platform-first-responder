@@ -4,8 +4,7 @@ struct ContentView: View {
     var body: some View {
         TabView {
             NavigationStack {
-                Text("Coming Soon")
-                    .navigationTitle("Incidents")
+                IncidentListView()
             }
             .tabItem {
                 Label("Incidents", systemImage: "exclamationmark.triangle")
