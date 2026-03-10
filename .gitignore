@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+*.swp
+*~
+
+# IDEs
+.idea/
+*.xcuserdata/
+*.xcworkspace/xcuserdata/
+
+# Build artifacts
+artifacts/
+
+# iOS
+ios/build/
+ios/DerivedData/
+ios/*.xcodeproj/xcuserdata/
+ios/*.xcodeproj/project.xcworkspace/xcuserdata/
+
+# Android (covered by android/.gitignore but also here for safety)
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+
+# Environment
+.env
+.env.*

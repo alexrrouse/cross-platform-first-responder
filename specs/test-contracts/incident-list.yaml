@@ -1,0 +1,159 @@
+feature: incident-list
+description: >
+  Active incident list — the primary screen responders interact with.
+  Displays dispatched incidents with real-time updates and filtering.
+
+cases:
+  # --- Data Loading ---
+  - id: IL001
+    category: unit
+    description: Initial load fetches incidents and populates state
+    given: User opens the incident list screen
+    when: ViewModel initializes
+    then: >
+      State transitions: isLoading=true → API call → isLoading=false,
+      incidents populated, lastUpdated set
+
+  - id: IL002
+    category: unit
+    description: Load failure sets error state
+    given: User opens incident list
+    when: API call fails with network error
+    then: isLoading=false, error message set, incidents empty
+
+  - id: IL003
+    category: unit
+    description: Pull-to-refresh reloads data
+    given: Incident list is showing stale data
+    when: OnRefresh event fires
+    then: Fresh API call made, incidents updated, lastUpdated refreshed
+
+  - id: IL004
+    category: unit
+    description: Empty incident list from API
+    given: User opens incident list
+    when: API returns empty array
+    then: isLoading=false, incidents is empty list, no error
+
+  # --- Filtering ---
+  - id: IL010
+    category: unit
+    description: Filter by active incidents
+    given: Incident list loaded with mixed-status incidents
+    when: OnFilterChanged(active) event fires
+    then: Only incidents with active statuses shown
+
+  - id: IL011
+    category: unit
+    description: Filter by my assigned incidents
+    given: Incident list loaded
+    when: OnFilterChanged(my_assigned) event fires
+    then: Only incidents where current user's unit is assigned shown
+
+  - id: IL012
+    category: unit
+    description: Filter resets to all
+    given: Filter is set to active
+    when: OnFilterChanged(all) event fires
+    then: All incidents shown regardless of status
+
+  # --- Real-Time Updates ---
+  - id: IL020
+    category: unit
+    description: WebSocket update adds new incident to list
+    given: Incident list is showing 3 incidents
+    when: OnIncidentUpdated fires with a new incident
+    then: List now contains 4 incidents, new one at top (newest first)
+
+  - id: IL021
+    category: unit
+    description: WebSocket update modifies existing incident
+    given: Incident list contains incident with id="123" status=dispatched
+    when: OnIncidentUpdated fires with id="123" status=en_route
+    then: Incident "123" in list now shows en_route status
+
+  - id: IL022
+    category: unit
+    description: WebSocket update removes cleared incident
+    given: Incident list contains incident with id="123"
+    when: OnIncidentUpdated fires with id="123" status=cleared
+    then: Incident "123" is removed from the list (or moved based on filter)
+
+  # --- Navigation ---
+  - id: IL030
+    category: unit
+    description: Tapping incident triggers navigation effect
+    given: Incident list shows incidents
+    when: OnIncidentTapped("123") event fires
+    then: NavigateToIncidentDetail("123") effect emitted
+
+  # --- Sorting ---
+  - id: IL040
+    category: unit
+    description: Incidents sorted by dispatch time descending
+    given: API returns incidents with different dispatch times
+    when: State is populated
+    then: Incidents ordered newest dispatch time first
+
+  - id: IL041
+    category: unit
+    description: High priority incidents visually distinguished
+    given: Mix of high and normal priority incidents
+    when: State is populated
+    then: High priority incidents have priority flag set in state
+
+  # --- UI Rendering ---
+  - id: IL050
+    category: ui
+    description: Loading state shows skeleton/shimmer
+    given: isLoading=true, incidents empty
+    when: Screen renders
+    then: Skeleton or shimmer placeholder cards visible
+    video_checkpoint: "Verify shimmer/skeleton loading cards are visible"
+
+  - id: IL051
+    category: ui
+    description: Empty state shows illustration and message
+    given: isLoading=false, incidents empty, no error
+    when: Screen renders
+    then: Empty state illustration and "No active incidents" text visible
+    video_checkpoint: "Verify empty state illustration and text"
+
+  - id: IL052
+    category: ui
+    description: Error state shows message and retry button
+    given: error is set
+    when: Screen renders
+    then: Error message and retry button visible
+    video_checkpoint: "Verify error text and retry button"
+
+  - id: IL053
+    category: ui
+    description: Incident card shows all required fields
+    given: Incidents loaded
+    when: Screen renders with incident cards
+    then: Each card shows case number, type icon, address, time, status badge
+    video_checkpoint: "Verify incident card displays all fields"
+
+  - id: IL054
+    category: ui
+    description: Filter chips reflect selected state
+    given: Incident list loaded
+    when: User taps "Active" filter
+    then: Active chip shows selected state, others show unselected
+    video_checkpoint: "Verify Active filter chip is highlighted"
+
+  # --- Offline ---
+  - id: IL060
+    category: unit
+    description: Offline mode shows cached data with banner
+    given: Device is offline, cached incidents exist
+    when: Screen loads
+    then: Cached incidents displayed, offline banner visible
+
+  - id: IL061
+    category: unit
+    description: Offline mode with no cache shows offline empty state
+    given: Device is offline, no cached incidents
+    when: Screen loads
+    then: Offline empty state shown with appropriate message

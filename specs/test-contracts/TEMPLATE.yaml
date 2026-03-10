@@ -1,0 +1,62 @@
+feature: feature-name
+description: >
+  Brief description of what this feature does.
+
+# Test cases that BOTH platforms must implement.
+# IDs are globally unique: {FEATURE_PREFIX}{NUMBER}
+# Categories: unit, ui, integration
+cases:
+  # --- State Loading ---
+  - id: XX001
+    category: unit
+    description: Initial load fetches data and updates state
+    given: Feature screen is opened for the first time
+    when: ViewModel initializes
+    then: State transitions from loading=true to loading=false with data populated
+    edge_case: false
+
+  - id: XX002
+    category: unit
+    description: Load failure shows error state
+    given: Feature screen is opened
+    when: Data fetch fails with network error
+    then: State has error message set, loading=false, items empty
+    edge_case: false
+
+  # --- UI Rendering ---
+  - id: XX010
+    category: ui
+    description: Loading state shows progress indicator
+    given: State has loading=true
+    when: Screen renders
+    then: A progress/loading indicator is visible
+    edge_case: false
+    video_checkpoint: "Verify spinner/skeleton is visible"
+
+  - id: XX011
+    category: ui
+    description: Error state shows error message and retry button
+    given: State has error set
+    when: Screen renders
+    then: Error message text and retry button are visible
+    edge_case: false
+    video_checkpoint: "Verify error message and retry button visible"
+
+  # --- User Interactions ---
+  - id: XX020
+    category: ui
+    description: Tap on item navigates to detail
+    given: List is showing items
+    when: User taps on an item
+    then: Navigation effect fires with correct item ID
+    edge_case: false
+    video_checkpoint: "Verify detail screen appears after tap"
+
+  # --- Edge Cases ---
+  - id: XX030
+    category: unit
+    description: Empty data shows empty state
+    given: Feature screen loads
+    when: API returns empty list
+    then: State has empty items, loading=false, no error
+    edge_case: true
