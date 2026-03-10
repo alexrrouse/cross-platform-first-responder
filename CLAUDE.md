@@ -33,6 +33,8 @@ This is a dual-native mobile app (iOS: Swift/SwiftUI, Android: Kotlin/Jetpack Co
 - Never add a test on one platform without adding the equivalent test on the other
 - Never change a data model on one platform without changing it on the other
 - Never skip reading the feature spec before implementing
+- Never hardcode colors — always use tokens from `specs/design/design-language.md`
+- Never pick an icon without checking the icon mapping table in the design language
 
 ## Architecture
 
@@ -40,6 +42,7 @@ This is a dual-native mobile app (iOS: Swift/SwiftUI, Android: Kotlin/Jetpack Co
 ```
 specs/
 ├── api/              # OpenAPI/protobuf — generates models for both platforms
+├── design/           # Design language — colors, icons, typography, spacing
 ├── features/         # Feature specs define behavior, states, edge cases
 └── test-contracts/   # Platform-agnostic test cases both platforms must pass
 ```
@@ -117,6 +120,25 @@ Tests must reference the contract case ID so we can trace parity:
 - iOS: Xcode test recordings via `xcodebuild test` with `-resultBundlePath`
 - Android: Gradle managed device recordings or `adb screenrecord`
 - Videos are uploaded as PR artifacts and linked in PR comments
+
+## Design Language
+
+The shared design language is defined in `specs/design/design-language.md`.
+This is the single source of truth for visual styling across both platforms.
+
+### Mandatory Rules
+- **Always read `specs/design/design-language.md` before implementing any UI**
+- Use the defined color tokens — never hardcode hex values in views
+- Use the icon mapping table to pick the correct platform-specific icon
+- Use the spacing tokens for all padding, margins, and gaps
+- Use the component style definitions for cards, badges, chips, banners, etc.
+- When adding a new color, icon, or style: update the design language doc FIRST,
+  then implement on both platforms
+
+### Platform Theme Files
+- iOS: `ios/TandemEMT/Core/Theme/AppColors.swift` — color token extensions
+- Android: `android/.../ui/theme/Color.kt` — color token definitions
+- Both files must contain the exact same hex values from the design language
 
 ## Code Generation
 - Data models are generated from `specs/api/` definitions
