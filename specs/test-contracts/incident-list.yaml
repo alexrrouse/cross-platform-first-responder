@@ -3,9 +3,28 @@ description: >
   Active incident list — the primary screen responders interact with.
   Displays dispatched incidents with real-time updates and filtering.
 
+# Shared test tags — both platforms MUST use these exact identifiers.
+# iOS: .accessibilityIdentifier("tag")  |  Android: Modifier.testTag("tag")
+test_tags:
+  - loading_indicator         # Loading spinner/skeleton container
+  - empty_state               # Empty state container
+  - error_state               # Error state container
+  - retry_button              # Retry button in error state
+  - offline_banner            # Offline warning banner
+  - filter_chip_ALL           # "All" filter chip
+  - filter_chip_ACTIVE        # "Active" filter chip
+  - filter_chip_MY_ASSIGNED   # "My Assigned" filter chip
+  - incident_card_{id}        # Incident card by ID
+  - case_number               # Case number text in card
+  - address                   # Address text in card
+  - status_badge              # Status badge in card
+  - dispatch_time             # Dispatch time text in card
+  - unit_count                # Unit count text in card
+
 cases:
   # --- Data Loading ---
   - id: IL001
+    test_name: test_IL001_initialLoadFetchesAndPopulatesState
     category: unit
     description: Initial load fetches incidents and populates state
     given: User opens the incident list screen
@@ -15,6 +34,7 @@ cases:
       incidents populated, lastUpdated set
 
   - id: IL002
+    test_name: test_IL002_loadFailureSetsErrorState
     category: unit
     description: Load failure sets error state
     given: User opens incident list
@@ -22,6 +42,7 @@ cases:
     then: isLoading=false, error message set, incidents empty
 
   - id: IL003
+    test_name: test_IL003_pullToRefreshReloadsData
     category: unit
     description: Pull-to-refresh reloads data
     given: Incident list is showing stale data
@@ -29,6 +50,7 @@ cases:
     then: Fresh API call made, incidents updated, lastUpdated refreshed
 
   - id: IL004
+    test_name: test_IL004_emptyIncidentListFromAPI
     category: unit
     description: Empty incident list from API
     given: User opens incident list
@@ -37,6 +59,7 @@ cases:
 
   # --- Filtering ---
   - id: IL010
+    test_name: test_IL010_filterByActiveIncidents
     category: unit
     description: Filter by active incidents
     given: Incident list loaded with mixed-status incidents
@@ -44,6 +67,7 @@ cases:
     then: Only incidents with active statuses shown
 
   - id: IL011
+    test_name: test_IL011_filterByMyAssignedIncidents
     category: unit
     description: Filter by my assigned incidents
     given: Incident list loaded
@@ -51,6 +75,7 @@ cases:
     then: Only incidents where current user's unit is assigned shown
 
   - id: IL012
+    test_name: test_IL012_filterResetsToAll
     category: unit
     description: Filter resets to all
     given: Filter is set to active
@@ -59,6 +84,7 @@ cases:
 
   # --- Real-Time Updates ---
   - id: IL020
+    test_name: test_IL020_webSocketUpdateAddsNewIncident
     category: unit
     description: WebSocket update adds new incident to list
     given: Incident list is showing 3 incidents
@@ -66,6 +92,7 @@ cases:
     then: List now contains 4 incidents, new one at top (newest first)
 
   - id: IL021
+    test_name: test_IL021_webSocketUpdateModifiesExistingIncident
     category: unit
     description: WebSocket update modifies existing incident
     given: Incident list contains incident with id="123" status=dispatched
@@ -73,6 +100,7 @@ cases:
     then: Incident "123" in list now shows en_route status
 
   - id: IL022
+    test_name: test_IL022_webSocketUpdateRemovesClearedIncident
     category: unit
     description: WebSocket update removes cleared incident
     given: Incident list contains incident with id="123"
@@ -81,6 +109,7 @@ cases:
 
   # --- Navigation ---
   - id: IL030
+    test_name: test_IL030_tappingIncidentTriggersNavigation
     category: unit
     description: Tapping incident triggers navigation effect
     given: Incident list shows incidents
@@ -89,6 +118,7 @@ cases:
 
   # --- Sorting ---
   - id: IL040
+    test_name: test_IL040_incidentsSortedByDispatchTimeDescending
     category: unit
     description: Incidents sorted by dispatch time descending
     given: API returns incidents with different dispatch times
@@ -96,6 +126,7 @@ cases:
     then: Incidents ordered newest dispatch time first
 
   - id: IL041
+    test_name: test_IL041_highPriorityIncidentsDistinguished
     category: unit
     description: High priority incidents visually distinguished
     given: Mix of high and normal priority incidents
@@ -104,47 +135,58 @@ cases:
 
   # --- UI Rendering ---
   - id: IL050
+    test_name: test_IL050_loadingStateShowsSkeleton
     category: ui
     description: Loading state shows skeleton/shimmer
     given: isLoading=true, incidents empty
     when: Screen renders
     then: Skeleton or shimmer placeholder cards visible
+    verify_tags: [loading_indicator]
     video_checkpoint: "Verify shimmer/skeleton loading cards are visible"
 
   - id: IL051
+    test_name: test_IL051_emptyStateShowsMessage
     category: ui
     description: Empty state shows illustration and message
     given: isLoading=false, incidents empty, no error
     when: Screen renders
     then: Empty state illustration and "No active incidents" text visible
+    verify_tags: [empty_state]
     video_checkpoint: "Verify empty state illustration and text"
 
   - id: IL052
+    test_name: test_IL052_errorStateShowsRetryButton
     category: ui
     description: Error state shows message and retry button
     given: error is set
     when: Screen renders
     then: Error message and retry button visible
+    verify_tags: [error_state, retry_button]
     video_checkpoint: "Verify error text and retry button"
 
   - id: IL053
+    test_name: test_IL053_incidentCardShowsAllFields
     category: ui
     description: Incident card shows all required fields
     given: Incidents loaded
     when: Screen renders with incident cards
     then: Each card shows case number, type icon, address, time, status badge
+    verify_tags: [case_number, address, status_badge, dispatch_time, unit_count]
     video_checkpoint: "Verify incident card displays all fields"
 
   - id: IL054
+    test_name: test_IL054_filterChipsReflectSelectedState
     category: ui
     description: Filter chips reflect selected state
     given: Incident list loaded
     when: User taps "Active" filter
     then: Active chip shows selected state, others show unselected
+    verify_tags: [filter_chip_ALL, filter_chip_ACTIVE, filter_chip_MY_ASSIGNED]
     video_checkpoint: "Verify Active filter chip is highlighted"
 
   # --- Offline ---
   - id: IL060
+    test_name: test_IL060_offlineModeShowsCachedDataWithBanner
     category: unit
     description: Offline mode shows cached data with banner
     given: Device is offline, cached incidents exist
@@ -152,6 +194,7 @@ cases:
     then: Cached incidents displayed, offline banner visible
 
   - id: IL061
+    test_name: test_IL061_offlineModeNoCacheShowsEmptyState
     category: unit
     description: Offline mode with no cache shows offline empty state
     given: Device is offline, no cached incidents

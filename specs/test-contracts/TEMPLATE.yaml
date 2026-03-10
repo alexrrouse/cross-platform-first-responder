@@ -2,61 +2,75 @@ feature: feature-name
 description: >
   Brief description of what this feature does.
 
+# Shared test tags — both platforms MUST use these exact identifiers.
+# iOS: .accessibilityIdentifier("tag")  |  Android: Modifier.testTag("tag")
+test_tags:
+  - loading_indicator    # Loading spinner/skeleton
+  - empty_state          # Empty state container
+  - error_state          # Error state container
+  - retry_button         # Retry button in error state
+
 # Test cases that BOTH platforms must implement.
 # IDs are globally unique: {FEATURE_PREFIX}{NUMBER}
 # Categories: unit, ui, integration
+#
+# IMPORTANT: test_name is the EXACT function name both platforms must use.
+# iOS:     func test_XX001_description() { ... }
+# Android: fun  test_XX001_description() { ... }
 cases:
   # --- State Loading ---
   - id: XX001
+    test_name: test_XX001_initialLoadFetchesAndPopulatesState
     category: unit
     description: Initial load fetches data and updates state
     given: Feature screen is opened for the first time
     when: ViewModel initializes
     then: State transitions from loading=true to loading=false with data populated
-    edge_case: false
 
   - id: XX002
+    test_name: test_XX002_loadFailureSetsErrorState
     category: unit
     description: Load failure shows error state
     given: Feature screen is opened
     when: Data fetch fails with network error
     then: State has error message set, loading=false, items empty
-    edge_case: false
 
   # --- UI Rendering ---
   - id: XX010
+    test_name: test_XX010_loadingStateShowsProgressIndicator
     category: ui
     description: Loading state shows progress indicator
     given: State has loading=true
     when: Screen renders
     then: A progress/loading indicator is visible
-    edge_case: false
+    verify_tags: [loading_indicator]
     video_checkpoint: "Verify spinner/skeleton is visible"
 
   - id: XX011
+    test_name: test_XX011_errorStateShowsRetryButton
     category: ui
     description: Error state shows error message and retry button
     given: State has error set
     when: Screen renders
     then: Error message text and retry button are visible
-    edge_case: false
+    verify_tags: [error_state, retry_button]
     video_checkpoint: "Verify error message and retry button visible"
 
   # --- User Interactions ---
   - id: XX020
+    test_name: test_XX020_tapOnItemNavigatesToDetail
     category: ui
     description: Tap on item navigates to detail
     given: List is showing items
     when: User taps on an item
     then: Navigation effect fires with correct item ID
-    edge_case: false
     video_checkpoint: "Verify detail screen appears after tap"
 
   # --- Edge Cases ---
   - id: XX030
+    test_name: test_XX030_emptyDataShowsEmptyState
     category: unit
     description: Empty data shows empty state
     given: Feature screen loads
     when: API returns empty list
     then: State has empty items, loading=false, no error
-    edge_case: true

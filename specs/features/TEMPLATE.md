@@ -47,6 +47,19 @@ Effect {
 - Minimum tap target sizes
 - Dynamic type / font scaling support
 
+## Test Tags
+List all testable UI elements with their shared identifiers.
+Both platforms must use these exact strings:
+- iOS: `.accessibilityIdentifier("tag_name")`
+- Android: `Modifier.testTag("tag_name")`
+
+| Tag | Element |
+|-----|---------|
+| `loading_indicator` | Loading spinner/skeleton |
+| `empty_state` | Empty state container |
+| `error_state` | Error state container |
+| `retry_button` | Retry button |
+
 ## Platform-Specific Notes
 Document any cases where platform behavior intentionally diverges:
 - iOS: {any iOS-specific behavior}

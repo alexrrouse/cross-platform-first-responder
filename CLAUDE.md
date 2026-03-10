@@ -105,21 +105,85 @@ Effect {
 Every feature has a test contract in `specs/test-contracts/{feature-name}.yaml`.
 Both platforms MUST implement tests that cover every case in the contract.
 
-### Test Naming
-Tests must reference the contract case ID so we can trace parity:
-- iOS: `func test_{caseId}_{description}()`
-- Android: `fun test_{caseId}_{description}()`
+### Test Naming — MUST Be Identical Across Platforms
+Test function names are **identical** on both platforms. This is non-negotiable.
+The contract defines the exact function name and both platforms use it verbatim.
 
-### What to Test
-- **Unit tests**: ViewModel logic, state transitions, data transformations
-- **UI tests**: Critical user flows, accessibility, screen state rendering
-- **Both platforms must have the same test coverage** for contract cases
+```
+// Contract defines:
+//   test_name: test_IL001_initialLoadFetchesAndPopulatesState
+//
+// iOS:
+//   func test_IL001_initialLoadFetchesAndPopulatesState()
+//
+// Android:
+//   fun test_IL001_initialLoadFetchesAndPopulatesState()
+```
+
+**Format:** `test_{caseId}_{camelCaseDescription}`
+
+This ensures:
+- The parity checker can verify both platforms implement every case
+- Test results from both platforms can be compared side-by-side by name
+- Video recordings from UI tests can be matched 1:1 between platforms
+
+### Test File Naming — MUST Be Identical Across Platforms
+Test files follow the same naming convention on both platforms:
+
+| Test Type | iOS File | Android File |
+|-----------|----------|-------------|
+| Unit tests (ViewModel) | `{Feature}ViewModelTests.swift` | `{Feature}ViewModelTest.kt` |
+| UI tests (Screen) | `{Feature}UITests.swift` | `{Feature}UITest.kt` |
+
+Note: iOS uses plural "Tests", Android uses singular "Test" (platform convention).
+
+### Unit Tests
+- Test ViewModel logic, state transitions, data transformations
+- Use mock/fake repositories for dependency injection
+- Test function names come from the contract `test_name` field
+
+### UI Tests — Cross-Platform Parity
+UI tests verify visual rendering and user interactions. They are critical for
+ensuring both platforms look and behave the same.
+
+**Rules:**
+- Every `category: ui` case in a test contract MUST have a UI test on both platforms
+- UI test function names MUST be identical on both platforms (from contract `test_name`)
+- UI tests should use **test tags / accessibility identifiers** for element lookup,
+  not text matching (text may differ slightly between platforms)
+- Both platforms MUST use the same test tag names for equivalent elements
+
+**Shared Test Tags (accessibility identifiers):**
+Both platforms must use identical string identifiers for testable elements.
+Define these in the test contract under `test_tags`.
+
+```yaml
+# Example from test contract:
+test_tags:
+  - empty_state          # Empty state container
+  - error_state          # Error state container
+  - retry_button         # Retry button in error state
+  - loading_indicator    # Loading spinner/skeleton
+  - filter_chip_{NAME}   # Filter chip (e.g., filter_chip_ALL)
+  - incident_card_{id}   # Incident card by ID
+  - case_number          # Case number text in card
+  - address              # Address text in card
+  - status_badge         # Status badge in card
+  - dispatch_time        # Dispatch time text in card
+  - unit_count           # Unit count text in card
+  - offline_banner       # Offline banner
+```
+
+**Platform implementation of test tags:**
+- iOS: Use `.accessibilityIdentifier("tag_name")`
+- Android: Use `Modifier.testTag("tag_name")`
 
 ### UI Test Video Recording
 - UI tests record screen videos during CI runs
 - iOS: Xcode test recordings via `xcodebuild test` with `-resultBundlePath`
 - Android: Gradle managed device recordings or `adb screenrecord`
 - Videos are uploaded as PR artifacts and linked in PR comments
+- Video filenames include the test name for easy cross-platform comparison
 
 ## Design Language
 
