@@ -56,14 +56,14 @@ struct IncidentListView: View {
             ForEach(0..<5, id: \.self) { _ in
                 VStack(alignment: .leading, spacing: 8) {
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(Color.secondary.opacity(0.2))
+                        .fill(Color.brandSecondary.opacity(0.2))
                         .frame(height: 20)
                         .frame(maxWidth: 200)
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(Color.secondary.opacity(0.15))
+                        .fill(Color.brandSecondary.opacity(0.15))
                         .frame(height: 16)
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(Color.secondary.opacity(0.1))
+                        .fill(Color.brandSecondary.opacity(0.1))
                         .frame(height: 14)
                         .frame(maxWidth: 120)
                 }
@@ -79,12 +79,12 @@ struct IncidentListView: View {
     private var emptyView: some View {
         VStack(spacing: 16) {
             Spacer()
-            Image(systemName: "checkmark.shield")
+            Image(systemName: "tray")
                 .font(.system(size: 60))
-                .foregroundColor(.secondary)
+                .foregroundColor(.statusCleared)
             Text("No active incidents")
                 .font(.title3)
-                .foregroundColor(.secondary)
+                .foregroundColor(.statusCleared)
             Spacer()
         }
         .frame(maxWidth: .infinity)
@@ -94,9 +94,9 @@ struct IncidentListView: View {
     private func errorView(message: String) -> some View {
         VStack(spacing: 16) {
             Spacer()
-            Image(systemName: "exclamationmark.triangle")
+            Image(systemName: "exclamationmark.circle")
                 .font(.system(size: 48))
-                .foregroundColor(.red)
+                .foregroundColor(.priorityHigh)
             Text(message)
                 .font(.body)
                 .foregroundColor(.secondary)
@@ -108,6 +108,7 @@ struct IncidentListView: View {
                 }
             }
             .buttonStyle(.borderedProminent)
+            .tint(.brandPrimary)
             Spacer()
         }
         .frame(maxWidth: .infinity)
@@ -136,13 +137,13 @@ struct IncidentListView: View {
         HStack {
             Image(systemName: "wifi.slash")
                 .font(.caption)
-            Text("Offline — data may be outdated")
+            Text("Offline \u{2014} data may be outdated")
                 .font(.caption)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 6)
-        .background(Color.orange.opacity(0.2))
-        .foregroundColor(.orange)
+        .background(Color.brandAccent.opacity(0.2))
+        .foregroundColor(.brandAccent)
     }
 }
 

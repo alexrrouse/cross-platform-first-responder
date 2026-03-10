@@ -7,7 +7,7 @@ struct IncidentCardView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: iconName(for: incident.type))
-                    .foregroundColor(iconColor(for: incident.type))
+                    .foregroundColor(.incidentTypeTint(incident.type))
                     .font(.title3)
 
                 Text(incident.caseNumber)
@@ -39,14 +39,18 @@ struct IncidentCardView: View {
                 .foregroundColor(.secondary)
             }
         }
-        .padding()
+        .padding(AppTheme.cardPadding)
         .background(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: AppTheme.cardCornerRadius)
                 .fill(Color(.systemBackground))
+                .shadow(radius: AppTheme.cardShadowRadius)
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(incident.priority == .high ? Color.red : Color.clear, lineWidth: 2)
+            RoundedRectangle(cornerRadius: AppTheme.cardCornerRadius)
+                .stroke(
+                    incident.priority == .high ? Color.priorityHigh : Color.clear,
+                    lineWidth: AppTheme.cardHighPriorityBorderWidth
+                )
         )
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityDescription)
@@ -56,10 +60,10 @@ struct IncidentCardView: View {
         Text(statusText)
             .font(.caption)
             .fontWeight(.medium)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .background(statusColor.opacity(0.2))
-            .foregroundColor(statusColor)
+            .padding(.horizontal, AppTheme.statusBadgeHPadding)
+            .padding(.vertical, AppTheme.statusBadgeVPadding)
+            .background(Color.statusColor(incident.status).opacity(0.2))
+            .foregroundColor(.statusColor(incident.status))
             .clipShape(Capsule())
             .accessibilityLabel("Status: \(statusText)")
     }
@@ -73,32 +77,13 @@ struct IncidentCardView: View {
         }
     }
 
-    private var statusColor: Color {
-        switch incident.status {
-        case .dispatched: return .orange
-        case .enRoute: return .blue
-        case .onScene: return .green
-        case .cleared: return .gray
-        }
-    }
-
     private func iconName(for type: IncidentType) -> String {
         switch type {
-        case .fire: return "flame"
-        case .ems: return "cross.case"
-        case .hazmat: return "exclamationmark.triangle"
+        case .fire: return "flame.fill"
+        case .ems: return "cross.case.fill"
+        case .hazmat: return "exclamationmark.triangle.fill"
         case .rescue: return "figure.wave"
-        case .other: return "questionmark.circle"
-        }
-    }
-
-    private func iconColor(for type: IncidentType) -> Color {
-        switch type {
-        case .fire: return .red
-        case .ems: return .blue
-        case .hazmat: return .yellow
-        case .rescue: return .orange
-        case .other: return .gray
+        case .other: return "questionmark.circle.fill"
         }
     }
 

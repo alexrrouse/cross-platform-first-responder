@@ -26,7 +26,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
@@ -37,6 +36,10 @@ import com.tandem.emt.features.incidentlist.models.IncidentStatus
 import com.tandem.emt.features.incidentlist.models.IncidentSummary
 import com.tandem.emt.features.incidentlist.models.IncidentType
 import com.tandem.emt.features.incidentlist.models.Priority
+import com.tandem.emt.ui.theme.PriorityHigh
+import com.tandem.emt.ui.theme.TextOnStatus
+import com.tandem.emt.ui.theme.incidentTypeTint
+import com.tandem.emt.ui.theme.statusColor
 
 @Composable
 fun IncidentCard(
@@ -46,7 +49,7 @@ fun IncidentCard(
 ) {
     val isHighPriority = incident.priority == Priority.HIGH
     val border = if (isHighPriority) {
-        BorderStroke(2.dp, Color.Red)
+        BorderStroke(2.dp, PriorityHigh)
     } else {
         null
     }
@@ -79,7 +82,7 @@ fun IncidentCard(
                         imageVector = iconForType(incident.type),
                         contentDescription = incident.type.name,
                         modifier = Modifier.size(24.dp),
-                        tint = if (isHighPriority) Color.Red else MaterialTheme.colorScheme.primary
+                        tint = incidentTypeTint(incident.type)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
@@ -125,12 +128,8 @@ fun IncidentCard(
 
 @Composable
 private fun StatusBadge(status: IncidentStatus) {
-    val (backgroundColor, textColor) = when (status) {
-        IncidentStatus.DISPATCHED -> Color(0xFFFF9800) to Color.White
-        IncidentStatus.EN_ROUTE -> Color(0xFF2196F3) to Color.White
-        IncidentStatus.ON_SCENE -> Color(0xFF4CAF50) to Color.White
-        IncidentStatus.CLEARED -> Color(0xFF9E9E9E) to Color.White
-    }
+    val backgroundColor = statusColor(status)
+    val textColor = TextOnStatus
 
     Surface(
         color = backgroundColor,

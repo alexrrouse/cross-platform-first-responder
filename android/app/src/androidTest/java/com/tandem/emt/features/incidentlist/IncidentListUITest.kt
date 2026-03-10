@@ -20,7 +20,7 @@ import com.tandem.emt.ui.theme.TandemEMTTheme
 import org.junit.Rule
 import org.junit.Test
 
-class IncidentListScreenTest {
+class IncidentListUITest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -46,7 +46,7 @@ class IncidentListScreenTest {
 
     // IL050: Loading state shows progress indicator
     @Test
-    fun test_IL050_loadingStateShowsProgressIndicator() {
+    fun test_IL050_loadingStateShowsSkeleton() {
         val repository = FakeIncidentRepository()
         // Don't set any result — loadIncidents won't be called until LaunchedEffect,
         // but we want to test the loading state directly.
