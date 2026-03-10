@@ -78,6 +78,8 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    // Force espresso-contrib to match espresso-core for API 36 compatibility
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.7.0-rc01")
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)

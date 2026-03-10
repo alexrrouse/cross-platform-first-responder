@@ -16,6 +16,7 @@ import com.tandem.emt.features.incidentlist.models.UnitSummary
 import com.tandem.emt.features.incidentlist.ui.FilterChipBar
 import com.tandem.emt.features.incidentlist.ui.IncidentCard
 import com.tandem.emt.features.incidentlist.ui.IncidentListScreen
+import com.tandem.emt.ui.theme.TandemEMTTheme
 import org.junit.Rule
 import org.junit.Test
 
@@ -108,17 +109,19 @@ class IncidentListScreenTest {
         val incident = makeIncident("test-1")
 
         composeTestRule.setContent {
-            IncidentCard(
-                incident = incident,
-                onClick = {}
-            )
+            TandemEMTTheme {
+                IncidentCard(
+                    incident = incident,
+                    onClick = {}
+                )
+            }
         }
 
-        composeTestRule.onNodeWithTag("case_number").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("address").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("dispatch_time").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("status_badge").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("unit_count").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("case_number", useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag("address", useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag("dispatch_time", useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag("status_badge", useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithTag("unit_count", useUnmergedTree = true).assertIsDisplayed()
     }
 
     // IL054: Filter chips reflect selected state

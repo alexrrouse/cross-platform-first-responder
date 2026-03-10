@@ -16,6 +16,7 @@ class ExampleInstrumentedTest {
 
     @Test
     fun appLaunches_contentIsVisible() {
-        composeTestRule.onNodeWithText("Coming Soon").assertIsDisplayed()
+        // Incidents tab is the start destination — verify it's showing
+        composeTestRule.onNodeWithText("Incidents").assertIsDisplayed()
     }
 }
