@@ -2,6 +2,8 @@
 
 Side-by-side snapshot viewer for comparing iOS and Android visual test snapshots. Browse all snapshot tests in a sidebar and instantly see both platform renderings side by side.
 
+<img width="1314" height="971" alt="Screenshot 2026-03-11 at 11 12 53 AM" src="https://github.com/user-attachments/assets/838952d0-7b78-4aba-a8ad-1450e7b83ace" />
+
 ## Quick Start
 
 ```bash
