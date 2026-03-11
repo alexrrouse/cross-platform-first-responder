@@ -1,0 +1,260 @@
+feature: incident-report
+description: >
+  Incident report form — allows responders to fill out and submit
+  a patient care report with vitals, treatments, and disposition.
+
+# Shared test tags — both platforms MUST use these exact identifiers.
+# iOS: .accessibilityIdentifier("tag")  |  Android: Modifier.testTag("tag")
+test_tags:
+  - report_form                    # Overall form container
+  - section_patient_info           # Patient info section
+  - section_vital_signs            # Vital signs section
+  - section_treatments             # Treatments & procedures section
+  - section_disposition            # Disposition section
+  - section_timestamps             # Timestamps section
+  - section_narrative              # Narrative section
+  - field_patient_name             # Patient name text field
+  - field_patient_age              # Patient age text field
+  - field_chief_complaint          # Chief complaint text field
+  - field_pulse_rate               # Pulse rate text field
+  - field_bp_systolic              # BP systolic text field
+  - field_bp_diastolic             # BP diastolic text field
+  - field_respiration_rate         # Respiration rate text field
+  - field_spo2                     # SpO2 text field
+  - treatment_list                 # Treatments list container
+  - add_treatment_button           # Add treatment button
+  - procedure_list                 # Procedures list container
+  - add_procedure_button           # Add procedure button
+  - disposition_picker             # Disposition selection
+  - field_transport_destination    # Transport destination field
+  - field_narrative                # Narrative text field
+  - timestamp_arrival              # Arrival time button
+  - timestamp_patient_contact      # Patient contact time button
+  - timestamp_transport            # Transport time button
+  - submit_button                  # Submit report button
+  - submitting_indicator           # Submitting spinner
+  - discard_dialog                 # Discard changes dialog
+  - success_message                # Submit success message
+
+cases:
+  # --- Initial State ---
+  - id: IR001
+    test_name: test_IR001_initialStateHasEmptyFields
+    category: unit
+    description: ViewModel starts with all fields empty/default
+    given: Report form is opened
+    when: ViewModel initializes
+    then: All fields empty, isSubmitting=false, validationErrors empty
+
+  # --- Field Updates ---
+  - id: IR002
+    test_name: test_IR002_fieldChangeUpdatesState
+    category: unit
+    description: Changing a field value updates the corresponding state
+    given: Report form is open
+    when: OnFieldChanged fires with patientName="John"
+    then: patientName state is "John"
+
+  # --- Submit Flow ---
+  - id: IR003
+    test_name: test_IR003_submitWithValidDataSetsSubmitting
+    category: unit
+    description: Submit with valid required fields transitions to isSubmitting=true
+    given: All required fields filled (patientName, chiefComplaint, disposition)
+    when: OnSubmit fires
+    then: isSubmitting=true, no validationErrors
+
+  - id: IR004
+    test_name: test_IR004_submitSuccessEmitsNavigateBack
+    category: unit
+    description: Successful API response emits NavigateBack effect
+    given: Report submitted with valid data
+    when: Repository returns success
+    then: NavigateBack effect emitted, isSubmitting=false
+
+  - id: IR005
+    test_name: test_IR005_submitFailureShowsError
+    category: unit
+    description: Failed API response emits ShowSubmitError effect
+    given: Report submitted with valid data
+    when: Repository returns error
+    then: ShowSubmitError effect emitted, isSubmitting=false
+
+  # --- Validation ---
+  - id: IR006
+    test_name: test_IR006_submitWithMissingRequiredFieldsSetsValidationErrors
+    category: unit
+    description: Submit with empty required fields populates validationErrors
+    given: Report form with all fields empty
+    when: OnSubmit fires
+    then: >
+      validationErrors contains entries for patientName, chiefComplaint,
+      disposition; isSubmitting remains false
+
+  - id: IR007
+    test_name: test_IR007_validationErrorClearsWhenFieldCorrected
+    category: unit
+    description: Fixing a field clears its validation error
+    given: validationErrors contains patientName error
+    when: OnFieldChanged fires with patientName="Jane"
+    then: validationErrors no longer contains patientName key
+
+  - id: IR008
+    test_name: test_IR008_patientAgeValidatesRange
+    category: unit
+    description: Age outside 0-150 sets validation error
+    given: Report form with patientAge="200"
+    when: OnSubmit fires
+    then: validationErrors contains patientAge entry
+
+  - id: IR009
+    test_name: test_IR009_vitalSignsValidateRanges
+    category: unit
+    description: Vitals outside valid ranges set validation errors
+    given: Report form with pulseRate="999"
+    when: OnSubmit fires
+    then: validationErrors contains pulseRate entry
+
+  - id: IR010
+    test_name: test_IR010_transportDestinationRequiredWhenTransported
+    category: unit
+    description: Disposition "transported" without destination sets validation error
+    given: Report form with disposition=transported, transportDestination=""
+    when: OnSubmit fires
+    then: validationErrors contains transportDestination entry
+
+  # --- Treatments & Procedures ---
+  - id: IR011
+    test_name: test_IR011_addTreatmentAppendsToList
+    category: unit
+    description: OnAddTreatment adds entry to treatments list
+    given: Treatments list is empty
+    when: OnAddTreatment("Oxygen") fires
+    then: treatments list contains ["Oxygen"]
+
+  - id: IR012
+    test_name: test_IR012_removeTreatmentRemovesFromList
+    category: unit
+    description: OnRemoveTreatment removes correct entry
+    given: Treatments list is ["Oxygen", "IV"]
+    when: OnRemoveTreatment(0) fires
+    then: treatments list contains ["IV"]
+
+  - id: IR013
+    test_name: test_IR013_addProcedureAppendsToList
+    category: unit
+    description: OnAddProcedure adds entry to procedures list
+    given: Procedures list is empty
+    when: OnAddProcedure("Intubation") fires
+    then: procedures list contains ["Intubation"]
+
+  - id: IR014
+    test_name: test_IR014_removeProcedureRemovesFromList
+    category: unit
+    description: OnRemoveProcedure removes correct entry
+    given: Procedures list is ["Intubation", "CPR"]
+    when: OnRemoveProcedure(0) fires
+    then: procedures list contains ["CPR"]
+
+  # --- Timestamps ---
+  - id: IR015
+    test_name: test_IR015_timestampTapRecordsCurrentTime
+    category: unit
+    description: OnTimestampTapped sets the corresponding timestamp
+    given: arrivalTime is nil
+    when: OnTimestampTapped("arrivalTime") fires
+    then: arrivalTime is set to a non-nil value
+
+  # --- Back Navigation ---
+  - id: IR016
+    test_name: test_IR016_backWithDirtyFormShowsDiscardConfirmation
+    category: unit
+    description: Back with changes emits ShowDiscardConfirmation
+    given: patientName has been changed from default
+    when: OnBackTapped fires
+    then: ShowDiscardConfirmation effect emitted
+
+  - id: IR017
+    test_name: test_IR017_backWithCleanFormNavigatesBack
+    category: unit
+    description: Back with no changes emits NavigateBack
+    given: No fields have been changed
+    when: OnBackTapped fires
+    then: NavigateBack effect emitted
+
+  - id: IR018
+    test_name: test_IR018_discardConfirmedNavigatesBack
+    category: unit
+    description: OnDiscardConfirmed emits NavigateBack
+    given: Discard confirmation is showing
+    when: OnDiscardConfirmed fires
+    then: NavigateBack effect emitted
+
+  - id: IR019
+    test_name: test_IR019_transportDestinationNotRequiredWhenRefusal
+    category: unit
+    description: Disposition "refusal" does not require transport destination
+    given: Report with disposition=refusal, transportDestination=""
+    when: OnSubmit fires (with other required fields filled)
+    then: validationErrors does NOT contain transportDestination entry
+
+  # --- UI Rendering ---
+  - id: IR050
+    test_name: test_IR050_formDisplaysAllSections
+    category: ui
+    description: All form sections visible on screen
+    given: Report form is opened
+    when: Screen renders
+    then: All section containers are present in the view hierarchy
+    verify_tags: [section_patient_info, section_vital_signs, section_treatments, section_disposition, section_timestamps, section_narrative, submit_button]
+    video_checkpoint: "Verify all form sections are visible when scrolling"
+
+  - id: IR051
+    test_name: test_IR051_validationErrorsDisplayInline
+    category: ui
+    description: Submitting empty form shows inline errors
+    given: Report form with empty required fields
+    when: Submit button tapped
+    then: Validation error messages appear near required fields
+    verify_tags: [submit_button]
+    video_checkpoint: "Verify validation errors appear after submit"
+
+  - id: IR052
+    test_name: test_IR052_submitButtonShowsSpinnerWhileSubmitting
+    category: ui
+    description: Submit button replaced by spinner during submission
+    given: Valid form data entered
+    when: Submit button tapped
+    then: Submitting indicator is visible
+    verify_tags: [submitting_indicator]
+    video_checkpoint: "Verify spinner replaces submit button"
+
+  - id: IR053
+    test_name: test_IR053_addAndRemoveTreatmentWorks
+    category: ui
+    description: Adding/removing treatment updates the list UI
+    given: Report form is open
+    when: User adds a treatment then removes it
+    then: Treatment appears then disappears from list
+    verify_tags: [add_treatment_button, treatment_list]
+    video_checkpoint: "Verify treatment add and remove"
+
+  - id: IR054
+    test_name: test_IR054_dispositionPickerShowsOptions
+    category: ui
+    description: Disposition picker shows all enum values
+    given: Report form is open
+    when: User interacts with disposition picker
+    then: All disposition options are available
+    verify_tags: [disposition_picker]
+    video_checkpoint: "Verify disposition picker options"
+
+  - id: IR055
+    test_name: test_IR055_timestampButtonRecordsTime
+    category: ui
+    description: Tapping timestamp button shows recorded time
+    given: Arrival time is not set
+    when: User taps arrival timestamp button
+    then: Button updates to show recorded time
+    verify_tags: [timestamp_arrival]
+    video_checkpoint: "Verify timestamp recorded on tap"

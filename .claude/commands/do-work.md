@@ -145,17 +145,19 @@ tools/ci/validate-test-parity.sh
 
 ---
 
-## Step 7 — Record UI test videos
+## Step 7 — Record UI test videos locally
 
-Run UI tests with video recording for both platforms:
+Run UI tests with video recording for both platforms **locally before pushing**:
 
 ```bash
 tools/ci/record-ui-tests.sh both
 ```
 
-If the recording script fails or simulators/emulators aren't available, note this in the PR description and skip — CI will handle recordings.
+**Video recording is required before creating the PR.** If a simulator/emulator is not available, troubleshoot and fix the issue rather than skipping. Videos are the primary way reviewers verify cross-platform visual parity.
 
-Video artifacts are saved to `artifacts/videos/ios/` and `artifacts/videos/android/`.
+If a platform's toolchain is genuinely not installed (e.g., no Xcode on a Linux machine), record the other platform and document the gap in the PR — but this should be the exception, not the norm.
+
+Video artifacts are saved to `artifacts/videos/ios/` and `artifacts/videos/android/`. Commit them so they are available in the PR.
 
 ---
 
@@ -200,8 +202,8 @@ gh pr create --title "<Feature Name>" --body "$(cat <<'PREOF'
 - All test contract cases covered
 
 ## Video Recordings
-- iOS: [link to CI artifact or local path]
-- Android: [link to CI artifact or local path]
+- iOS: `artifacts/videos/ios/<feature>.mp4`
+- Android: `artifacts/videos/android/<feature>.mp4`
 PREOF
 )"
 ```

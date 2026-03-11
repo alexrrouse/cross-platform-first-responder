@@ -11,21 +11,37 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = BrandPrimary,
+    secondary = BrandSecondary,
+    tertiary = BrandAccent,
+    background = SurfaceBackgroundDark,
+    surface = SurfaceCardDark,
+    error = TextErrorDark,
+    onPrimary = TextOnStatus,
+    onBackground = TextPrimaryDark,
+    onSurface = TextPrimaryDark,
+    onSurfaceVariant = TextSecondaryDark,
+    onError = TextOnStatus
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = BrandPrimary,
+    secondary = BrandSecondary,
+    tertiary = BrandAccent,
+    background = SurfaceBackgroundLight,
+    surface = SurfaceCardLight,
+    error = TextErrorLight,
+    onPrimary = TextOnStatus,
+    onBackground = TextPrimaryLight,
+    onSurface = TextPrimaryLight,
+    onSurfaceVariant = TextSecondaryLight,
+    onError = TextOnStatus
 )
 
 @Composable
 fun TandemEMTTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
