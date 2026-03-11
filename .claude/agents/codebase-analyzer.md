@@ -32,17 +32,26 @@ specs/
 
 ### Platform Code (Mirrored Structure)
 ```
-ios/Features/{FeatureName}/
-├── Models/           # Data models
-├── ViewModels/       # Business logic, state management
-├── Views/            # SwiftUI views
-└── Tests/            # Unit + UI tests
+ios/TandemEMT/Features/{FeatureName}/
+├── Models/                        # Data models
+├── ViewModels/                    # ViewModel (ObservableObject)
+├── Views/                         # SwiftUI views
+└── {Feature}Repository.swift      # Repository (feature root)
 
-android/features/{featureName}/
-├── models/           # Data models
-├── viewmodels/       # Business logic, state management
-├── ui/               # Compose screens/components
-└── tests/            # Unit + UI tests
+android/app/src/main/java/com/tandem/emt/features/{featureName}/
+├── models/                        # Data models
+├── ui/                            # Compose screens/components
+├── {Feature}ViewModel.kt          # ViewModel (feature root)
+└── {Feature}Repository.kt         # Repository (feature root)
+```
+
+### Test Locations
+```
+ios/TandemEMTTests/{Feature}Tests/{Feature}ViewModelTests.swift
+ios/TandemEMTUITests/{Feature}UITests.swift
+
+android/app/src/test/.../features/{featureName}/{Feature}ViewModelTest.kt
+android/app/src/androidTest/.../features/{featureName}/{Feature}UITest.kt
 ```
 
 ### Naming Convention Map
@@ -52,13 +61,14 @@ android/features/{featureName}/
 | ViewModel | `IncidentListViewModel` | `IncidentListViewModel` |
 | Main screen | `IncidentListView` | `IncidentListScreen` |
 | Model | `Incident` | `Incident` |
-| Test class | `IncidentListViewModelTests` | `IncidentListViewModelTest` |
+| Unit test class | `IncidentListViewModelTests` | `IncidentListViewModelTest` |
+| UI test class | `IncidentListUITests` | `IncidentListUITest` |
 
-### State Management (Both Platforms)
-Both platforms use the same State/Event/Effect pattern:
-- **State**: Single immutable state object per screen
-- **Events**: User interactions triggering state changes
-- **Effects**: One-shot events (navigation, toasts)
+### State Management (Platform-Idiomatic)
+Both platforms model the same state fields but use different containers:
+- **iOS**: `@Published` properties on `@MainActor ObservableObject`, events as `func` methods, effects as `@Published` properties
+- **Android**: Top-level `data class {Feature}UiState` with `MutableStateFlow`, events as `fun` methods, `sealed class {Feature}Effect` via `Channel`
+- **Parity rule**: State fields, event methods, and effect cases must be equivalent across platforms
 
 ## Core Responsibilities
 

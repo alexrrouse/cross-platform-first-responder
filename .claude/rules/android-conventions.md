@@ -7,28 +7,31 @@ paths:
 
 ## File Organization
 ```
-android/features/{featureName}/
-├── models/           # Data models (generated from specs/api where possible)
-├── viewmodels/       # Business logic, state management (AndroidX ViewModel)
-├── ui/               # Compose screens/components
-└── tests/            # Unit + UI tests matching specs/test-contracts
+android/app/src/main/java/com/tandem/emt/features/{featureName}/
+├── models/                        # Data models
+├── ui/                            # Compose screens/components
+├── {Feature}ViewModel.kt          # ViewModel (feature root)
+└── {Feature}Repository.kt         # Repository interface + impl (feature root)
 ```
 
 ## Shared Infrastructure
-- `android/.../ui/theme/Color.kt` — Color token definitions (must match design language hex values)
-- Android networking, DI (Hilt), and navigation components in `android/app/src/main/`
+- `android/app/src/main/java/com/tandem/emt/ui/theme/Color.kt` — Color token definitions
+- `android/app/src/main/java/com/tandem/emt/ui/theme/DesignTokens.kt` — Spacing/typography tokens
+- `android/app/src/main/java/com/tandem/emt/navigation/AppNavigation.kt` — Navigation graph
 
 ## Naming
 - Screens: `{Feature}Screen` (e.g., `IncidentListScreen`)
-- ViewModels: `{Feature}ViewModel` with `@HiltViewModel` / `@Inject`
-- State: `data class State` inside ViewModel
-- Events: `sealed class Event` inside ViewModel
-- Effects: `sealed class Effect` inside ViewModel
+- ViewModels: `{Feature}ViewModel` extending `ViewModel()`
+- State: Top-level `data class {Feature}UiState` (outside ViewModel class)
+- Events: Public `fun` methods on ViewModel (e.g., `fun onRefresh()`)
+- Effects: Top-level `sealed class {Feature}Effect` emitted via `Channel`
 
 ## Testing
-- Unit test files: `{Feature}ViewModelTest.kt` (singular "Test")
-- UI test files: `{Feature}UITest.kt` (singular "Test")
-- Test tags: use `Modifier.testTag("tag_name")`
+- Unit test dir: `android/app/src/test/java/com/tandem/emt/features/{featureName}/`
+- Unit test file: `{Feature}ViewModelTest.kt` (singular "Test")
+- UI test dir: `android/app/src/androidTest/java/com/tandem/emt/features/{featureName}/`
+- UI test file: `{Feature}UITest.kt` (singular "Test")
+- **Test tags: MUST use `Modifier.testTag("tag_name")` on every testable element** — required for UI test parity with iOS `.accessibilityIdentifier()`
 - UI test video: Gradle managed device recordings or `adb screenrecord`
 
 ## Design Tokens

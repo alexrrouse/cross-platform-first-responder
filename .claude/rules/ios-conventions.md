@@ -7,11 +7,11 @@ paths:
 
 ## File Organization
 ```
-ios/Features/{FeatureName}/
-├── Models/           # Data models (generated from specs/api where possible)
-├── ViewModels/       # Business logic, state management (ObservableObject)
-├── Views/            # SwiftUI views
-└── Tests/            # Unit + UI tests matching specs/test-contracts
+ios/TandemEMT/Features/{FeatureName}/
+├── Models/                        # Data models
+├── ViewModels/                    # ViewModel (ObservableObject)
+├── Views/                         # SwiftUI views
+└── {Feature}Repository.swift      # Repository protocol + impl (feature root)
 ```
 
 ## Shared Infrastructure
@@ -21,15 +21,17 @@ ios/Features/{FeatureName}/
 
 ## Naming
 - Views: `{Feature}View` (e.g., `IncidentListView`)
-- ViewModels: `{Feature}ViewModel` as `ObservableObject`
-- State: `struct State` inside ViewModel
-- Events: `enum Event` inside ViewModel
-- Effects: `enum Effect` inside ViewModel
+- ViewModels: `{Feature}ViewModel` as `@MainActor ObservableObject`
+- State: `@Published` properties directly on ViewModel (not a nested struct)
+- Events: Public `func` methods on ViewModel (e.g., `func onRefresh()`)
+- Effects: `@Published` properties (e.g., `navigationTarget: String?`)
 
 ## Testing
-- Unit test files: `{Feature}ViewModelTests.swift` (plural "Tests")
-- UI test files: `{Feature}UITests.swift` (plural "Tests")
-- Test tags: use `.accessibilityIdentifier("tag_name")`
+- Unit test dir: `ios/TandemEMTTests/{Feature}Tests/`
+- Unit test file: `{Feature}ViewModelTests.swift` (plural "Tests")
+- UI test dir: `ios/TandemEMTUITests/`
+- UI test file: `{Feature}UITests.swift` (plural "Tests")
+- **Test tags: MUST use `.accessibilityIdentifier("tag_name")` on every testable element** — this is required for UI test parity with Android's `Modifier.testTag()`
 - UI test video: Xcode test recordings via `xcodebuild test` with `-resultBundlePath`
 
 ## Design Tokens

@@ -27,16 +27,23 @@ specs/
 
 ### Platform Code (Mirrored Structure)
 ```
-ios/Features/{FeatureName}/        android/features/{featureName}/
-├── Models/                        ├── models/
-├── ViewModels/                    ├── viewmodels/
-├── Views/                         ├── ui/
-└── Tests/                         └── tests/
+ios/TandemEMT/Features/{FeatureName}/
+├── Models/                        # Data models
+├── ViewModels/                    # ViewModel
+├── Views/                         # SwiftUI views
+└── {Feature}Repository.swift      # Repository (feature root)
+
+android/app/src/main/java/com/tandem/emt/features/{featureName}/
+├── models/                        # Data models
+├── ui/                            # Compose screens/components
+├── {Feature}ViewModel.kt          # ViewModel (feature root)
+└── {Feature}Repository.kt         # Repository (feature root)
 ```
 
 Also check:
 - `ios/TandemEMT/Core/` — shared iOS infrastructure (Theme, Networking, Navigation)
-- `android/app/src/main/.../core/` — shared Android infrastructure
+- `android/app/src/main/java/com/tandem/emt/ui/theme/` — Android theme (Color.kt, DesignTokens.kt)
+- `android/app/src/main/java/com/tandem/emt/navigation/` — Android navigation
 
 ### Naming Convention Map
 | Concept | iOS (Swift) | Android (Kotlin) |
@@ -57,15 +64,17 @@ Also check:
 - Search `specs/api/` for data model definitions
 
 ### Step 2: Search iOS
-- `ios/Features/{FeatureName}/` for feature-specific code
+- `ios/TandemEMT/Features/{FeatureName}/` for feature-specific code
 - `ios/TandemEMT/Core/` for shared infrastructure
-- `ios/TandemEMTTests/` and `ios/TandemEMTUITests/` for tests
+- `ios/TandemEMTTests/` for unit tests
+- `ios/TandemEMTUITests/` for UI tests
 - File extensions: `.swift`
 
 ### Step 3: Search Android
-- `android/features/{featureName}/` for feature-specific code
-- `android/app/src/main/` for main source
-- `android/app/src/test/` and `android/app/src/androidTest/` for tests
+- `android/app/src/main/java/com/tandem/emt/features/{featureName}/` for feature-specific code
+- `android/app/src/main/java/com/tandem/emt/` for shared infrastructure
+- `android/app/src/test/java/com/tandem/emt/features/` for unit tests
+- `android/app/src/androidTest/java/com/tandem/emt/features/` for UI tests
 - File extensions: `.kt`
 
 ### Step 4: Search Tooling

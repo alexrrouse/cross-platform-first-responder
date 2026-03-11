@@ -33,20 +33,27 @@ specs/
 
 ### Platform Code (Mirrored)
 ```
-ios/Features/{FeatureName}/        android/features/{featureName}/
-├── Models/                        ├── models/
-├── ViewModels/                    ├── viewmodels/
-├── Views/                         ├── ui/
-└── Tests/                         └── tests/
+ios/TandemEMT/Features/{FeatureName}/
+├── Models/                        # Data models
+├── ViewModels/                    # ViewModel (ObservableObject)
+├── Views/                         # SwiftUI views
+└── {Feature}Repository.swift      # Repository (feature root)
+
+android/app/src/main/java/com/tandem/emt/features/{featureName}/
+├── models/                        # Data models
+├── ui/                            # Compose screens/components
+├── {Feature}ViewModel.kt          # ViewModel (feature root)
+└── {Feature}Repository.kt         # Repository (feature root)
 ```
 
 ### Key Pattern Locations
-- **State/Event/Effect**: ViewModel files on both platforms
-- **Design tokens**: `ios/.../AppColors.swift` + `android/.../Color.kt` + `specs/design/design-language.md`
+- **State**: iOS `@Published` properties on ViewModel + Android top-level `data class {Feature}UiState`
+- **Effects**: iOS `@Published` property + Android top-level `sealed class {Feature}Effect` via `Channel`
+- **Design tokens**: `ios/TandemEMT/Core/Theme/AppColors.swift` + `android/.../ui/theme/Color.kt` + `specs/design/design-language.md`
 - **Test tags**: Test contract YAML + `.accessibilityIdentifier()` (iOS) + `Modifier.testTag()` (Android)
 - **Test naming**: Contract `test_name` field → identical function names on both platforms
-- **Navigation**: `ios/.../AppRouter.swift` + Android nav component
-- **Networking**: `ios/.../APIClient.swift` + Android Retrofit/Ktor setup
+- **Navigation**: `ios/TandemEMT/Core/Navigation/AppRouter.swift` + `android/.../navigation/AppNavigation.kt`
+- **Networking**: `ios/TandemEMT/Core/Networking/APIClient.swift` + Android networking setup
 
 ## Core Responsibilities
 
@@ -100,63 +107,76 @@ ios/Features/{FeatureName}/        android/features/{featureName}/
 ```
 
 ### iOS Pattern
-**Found in**: `ios/Features/{Name}/ViewModels/{Name}ViewModel.swift:XX-YY`
+**Found in**: `ios/TandemEMT/Features/{Name}/ViewModels/{Name}ViewModel.swift:XX-YY`
 
 ```swift
-// iOS implementation
+// iOS implementation — state as @Published properties
+@MainActor
 class IncidentListViewModel: ObservableObject {
-    struct State {
-        var isLoading = false
-        var incidents: [Incident] = []
-        var error: String?
-    }
+    @Published private(set) var isLoading = false
+    @Published private(set) var incidents: [IncidentSummary] = []
+    @Published private(set) var error: String?
+    @Published var filterStatus: FilterStatus = .all
+    @Published private(set) var lastUpdated: Date?
+    @Published private(set) var isOffline = false
 
-    enum Event {
-        case onLoad
-        case onRefresh
-        case onIncidentTapped(String)
-    }
+    // Effects as @Published properties
+    @Published var navigationTarget: String?
 
-    enum Effect {
-        case navigateToDetail(String)
-        case showError(String)
-    }
+    // Dependencies via protocol
+    private let repository: IncidentRepositoryProtocol
+
+    // Events as methods
+    func loadIncidents() async { ... }
+    func onFilterChanged(_ filter: FilterStatus) { ... }
+    func onIncidentTapped(_ id: String) { ... }
 }
 ```
 
 ### Android Pattern
-**Found in**: `android/features/{name}/viewmodels/{Name}ViewModel.kt:XX-YY`
+**Found in**: `android/app/src/main/java/com/tandem/emt/features/{name}/{Name}ViewModel.kt:XX-YY`
 
 ```kotlin
-// Android implementation
-class IncidentListViewModel @Inject constructor() : ViewModel() {
-    data class State(
-        val isLoading: Boolean = false,
-        val incidents: List<Incident> = emptyList(),
-        val error: String? = null
-    )
+// Android implementation — state as top-level data class
+data class IncidentListUiState(
+    val isLoading: Boolean = false,
+    val incidents: List<IncidentSummary> = emptyList(),
+    val error: String? = null,
+    val filterStatus: FilterStatus = FilterStatus.ALL,
+    val lastUpdated: Long? = null,
+    val isOffline: Boolean = false
+)
 
-    sealed class Event {
-        object OnLoad : Event()
-        object OnRefresh : Event()
-        data class OnIncidentTapped(val id: String) : Event()
-    }
+sealed class IncidentListEffect {
+    data class NavigateToIncidentDetail(val incidentId: String) : IncidentListEffect()
+    data class ShowError(val message: String) : IncidentListEffect()
+}
 
-    sealed class Effect {
-        data class NavigateToDetail(val id: String) : Effect()
-        data class ShowError(val message: String) : Effect()
-    }
+class IncidentListViewModel(
+    private val repository: IncidentRepository
+) : ViewModel() {
+    private val _uiState = MutableStateFlow(IncidentListUiState())
+    val uiState: StateFlow<IncidentListUiState> = _uiState.asStateFlow()
+
+    private val _effects = Channel<IncidentListEffect>(Channel.BUFFERED)
+    val effects: Flow<IncidentListEffect> = _effects.receiveAsFlow()
+
+    // Events as methods
+    fun loadIncidents() { ... }
+    fun onFilterChanged(filter: FilterStatus) { ... }
+    fun onIncidentTapped(id: String) { ... }
 }
 ```
 
 ### Cross-Platform Mapping
 | Concept | iOS (Swift) | Android (Kotlin) |
 |---------|-------------|-------------------|
-| State container | `struct State` | `data class State` |
-| Events | `enum Event` | `sealed class Event` |
-| Effects | `enum Effect` | `sealed class Effect` |
-| Reactivity | `@Published` / Combine | `StateFlow` / Flow |
-| DI | Protocol-based | Hilt `@Inject` |
+| State container | `@Published` properties on ViewModel | Top-level `data class {Feature}UiState` |
+| State observation | `@Published` / SwiftUI binding | `StateFlow` / `collectAsState()` |
+| Events | `func` methods on ViewModel | `fun` methods on ViewModel |
+| Effects | `@Published` property (e.g., `navigationTarget`) | `sealed class` via `Channel` + `Flow` |
+| DI | Protocol-based injection | Constructor injection (interface-based) |
+| Concurrency | `async/await` + `@MainActor` | `viewModelScope.launch` + Coroutines |
 
 ### Test Pattern
 **iOS**: `ios/Features/{Name}/Tests/{Name}ViewModelTests.swift:XX`

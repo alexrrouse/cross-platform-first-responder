@@ -13,11 +13,32 @@ specs/
 Both platforms follow MVVM and mirror each other's file organization:
 
 ```
-ios/Features/{FeatureName}/        android/features/{featureName}/
-├── Models/                        ├── models/
-├── ViewModels/                    ├── viewmodels/
-├── Views/                         ├── ui/
-└── Tests/                         └── tests/
+ios/TandemEMT/Features/{FeatureName}/
+├── Models/                        # Data models
+├── ViewModels/                    # ViewModel + repository
+├── Views/                         # SwiftUI views
+├── {Feature}Repository.swift      # Repository protocol + impl (feature root)
+
+android/app/src/main/java/com/tandem/emt/features/{featureName}/
+├── models/                        # Data models
+├── ui/                            # Compose screens/components
+├── {Feature}ViewModel.kt          # ViewModel (feature root)
+├── {Feature}Repository.kt         # Repository interface + impl (feature root)
+```
+
+### Test Locations
+```
+ios/TandemEMTTests/{Feature}Tests/
+└── {Feature}ViewModelTests.swift
+
+ios/TandemEMTUITests/
+└── {Feature}UITests.swift
+
+android/app/src/test/java/com/tandem/emt/features/{featureName}/
+└── {Feature}ViewModelTest.kt
+
+android/app/src/androidTest/java/com/tandem/emt/features/{featureName}/
+└── {Feature}UITest.kt
 ```
 
 ## Naming Conventions
@@ -30,27 +51,20 @@ ios/Features/{FeatureName}/        android/features/{featureName}/
 | Test class | `IncidentListViewModelTests` | `IncidentListViewModelTest` |
 
 ## State Management Pattern
-Both platforms use the same state machine approach:
-- **State**: A single immutable state object per screen/feature
-- **Events/Actions**: User interactions that trigger state changes
-- **Effects/Side Effects**: One-shot events (navigation, toasts, etc.)
+Both platforms model the same state fields, events, and effects — but use platform-idiomatic containers:
 
-```
-// Both platforms model state identically:
-State {
-  isLoading: Boolean
-  items: List<Item>
-  error: String?
-}
+### iOS (Swift/SwiftUI)
+- State fields as `@Published` properties on `ObservableObject` ViewModel
+- Events as `func` methods on the ViewModel (e.g., `func onRefresh()`)
+- Effects via `@Published` properties (e.g., `navigationTarget: String?`)
 
-Event {
-  OnLoad
-  OnRefresh
-  OnItemTapped(id)
-}
+### Android (Kotlin/Compose)
+- State as a top-level `data class {Feature}UiState` with `MutableStateFlow`
+- Events as `fun` methods on the ViewModel (e.g., `fun onRefresh()`)
+- Effects as a `sealed class {Feature}Effect` emitted via `Channel`
 
-Effect {
-  NavigateToDetail(id)
-  ShowError(message)
-}
-```
+### Parity Rule
+The **state fields, event methods, and effect cases must be equivalent** across platforms even though the containers differ. Both must have the same:
+- State fields (same names, same types, same defaults)
+- Public methods for events (same names)
+- Effect cases (same cases, same associated data)

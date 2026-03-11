@@ -25,6 +25,7 @@ Detailed rules are in `.claude/rules/`:
 - Test contracts: `specs/test-contracts/`
 - Design tokens: `specs/design/design-language.md`
 - iOS theme: `ios/TandemEMT/Core/Theme/AppColors.swift`
-- Android theme: `android/.../ui/theme/Color.kt`
+- Android theme: `android/app/src/main/java/com/tandem/emt/ui/theme/Color.kt`
+- Android tokens: `android/app/src/main/java/com/tandem/emt/ui/theme/DesignTokens.kt`
 - Codegen: `tools/codegen/generate.sh`
 - CI parity check: `tools/ci/validate-test-parity.sh`

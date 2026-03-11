@@ -30,8 +30,10 @@ Run `git diff main...HEAD` to see all changes. If the diff is very large, use `g
 #### File Parity
 - Every iOS file must have an Android counterpart (and vice versa)
 - Check the mirrored structure:
-  - `ios/Features/{FeatureName}/` ↔ `android/features/{featureName}/`
-  - Models, ViewModels, Views/UI, Tests must all exist on both sides
+  - `ios/TandemEMT/Features/{FeatureName}/` ↔ `android/app/src/main/java/com/tandem/emt/features/{featureName}/`
+  - Models, ViewModels, Views/UI, Repository must all exist on both sides
+  - Unit tests: `ios/TandemEMTTests/{Feature}Tests/` ↔ `android/app/src/test/.../features/{featureName}/`
+  - UI tests: `ios/TandemEMTUITests/` ↔ `android/app/src/androidTest/.../features/{featureName}/`
 - Flag any file that exists on one platform but not the other
 
 #### Naming Parity
@@ -43,8 +45,10 @@ Run `git diff main...HEAD` to see all changes. If the diff is very large, use `g
 
 #### State Model Parity
 - State fields must match across platforms (same names, same types, same defaults)
-- Event/Action cases must match (same cases, same associated data)
-- Effect cases must match
+  - iOS uses `@Published` properties on ViewModel; Android uses a top-level `data class {Feature}UiState`
+  - Despite different containers, the **field names and types must correspond**
+- Event methods must match: iOS `func` methods ↔ Android `fun` methods (same names)
+- Effect cases must match: iOS `@Published` effect properties ↔ Android `sealed class {Feature}Effect`
 - If one platform has a state field the other doesn't, this is a **blocker**
 
 #### Logic Parity
@@ -64,7 +68,8 @@ Run `git diff main...HEAD` to see all changes. If the diff is very large, use `g
 - Colors must use tokens from `specs/design/design-language.md`, never hardcoded hex
 - Icon usage must follow the icon mapping table in the design language
 - Spacing must use defined tokens
-- Check both `AppColors.swift` (iOS) and `Color.kt` (Android) if theme files were modified
+- Check both `ios/TandemEMT/Core/Theme/AppColors.swift` and `android/.../ui/theme/Color.kt` if theme files were modified
+- **Verify every iOS view uses `.accessibilityIdentifier()` for test tags** — this is a known gap; iOS has historically missed these while Android uses `Modifier.testTag()` correctly
 
 ### Step 3: Review for Correctness
 - Does the implementation match the feature spec in `specs/features/`?
