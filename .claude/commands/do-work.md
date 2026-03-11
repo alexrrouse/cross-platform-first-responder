@@ -104,21 +104,7 @@ Additionally, if platform build tools are available:
 
 ---
 
-## Step 5 — Record UI test videos
-
-Run UI tests with video recording for both platforms:
-
-```bash
-tools/ci/record-ui-tests.sh both
-```
-
-If the recording script fails or simulators/emulators aren't available, note this in the PR description and skip — CI will handle recordings.
-
-Video artifacts are saved to `artifacts/videos/ios/` and `artifacts/videos/android/`.
-
----
-
-## Step 6 — Cross-platform parity review
+## Step 5 — Cross-platform parity review
 
 Launch an **Agent tool** with `subagent_type: "code-reviewer"` to perform the parity-focused code review.
 
@@ -144,7 +130,7 @@ The review agent will run `git diff main...HEAD` and review for parity, correctn
 
 ---
 
-## Step 7 — Address ALL review feedback
+## Step 6 — Address ALL review feedback
 
 **Every piece of feedback must be addressed.** For each item, do exactly one:
 
@@ -156,6 +142,20 @@ After addressing all feedback, re-run:
 ```bash
 tools/ci/validate-test-parity.sh
 ```
+
+---
+
+## Step 7 — Record UI test videos
+
+Run UI tests with video recording for both platforms:
+
+```bash
+tools/ci/record-ui-tests.sh both
+```
+
+If the recording script fails or simulators/emulators aren't available, note this in the PR description and skip — CI will handle recordings.
+
+Video artifacts are saved to `artifacts/videos/ios/` and `artifacts/videos/android/`.
 
 ---
 
@@ -209,6 +209,7 @@ PREOF
 ---
 
 ## Step 9 — Final summary
+
 
 Provide a **final summary** including:
 
