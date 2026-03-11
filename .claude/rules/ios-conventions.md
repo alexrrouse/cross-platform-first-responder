@@ -32,7 +32,8 @@ ios/TandemEMT/Features/{FeatureName}/
 - UI test dir: `ios/TandemEMTUITests/`
 - UI test file: `{Feature}UITests.swift` (plural "Tests")
 - **Test tags: MUST use `.accessibilityIdentifier("tag_name")` on every testable element** — this is required for UI test parity with Android's `Modifier.testTag()`
-- UI test video: Xcode test recordings via `xcodebuild test` with `-resultBundlePath`
+- UI test video: Run `./tools/ci/record-ui-tests.sh ios` — records simulator via `xcrun simctl io recordVideo`, saves mp4 to `artifacts/videos/ios/`
+- **SwiftUI Form caveat:** Place `.accessibilityIdentifier()` on section header `Text`, not on `Section` itself — Section-level identifiers hide child element identifiers from XCUITest
 
 ## Design Tokens
 - Never hardcode colors — use `AppColors` extensions

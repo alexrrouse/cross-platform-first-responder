@@ -16,6 +16,6 @@ class ExampleInstrumentedTest {
 
     @Test
     fun appLaunches_contentIsVisible() {
-        composeTestRule.onNodeWithText("Coming Soon").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Incidents").assertIsDisplayed()
     }
 }

@@ -51,8 +51,12 @@ Both platforms must use identical string identifiers. Define these in the test c
 - Android: `Modifier.testTag("tag_name")`
 
 ## UI Test Video Recording
-- UI tests record screen videos during CI runs
-- iOS: Xcode test recordings via `xcodebuild test` with `-resultBundlePath`
-- Android: Gradle managed device recordings or `adb screenrecord`
-- Videos are uploaded as PR artifacts and linked in PR comments
-- Video filenames include the test name for easy cross-platform comparison
+- Run `./tools/ci/record-ui-tests.sh` to record demo videos on both platforms
+  - `./tools/ci/record-ui-tests.sh ios` — iOS only
+  - `./tools/ci/record-ui-tests.sh android` — Android only (requires running emulator)
+  - `./tools/ci/record-ui-tests.sh both` — both platforms
+- iOS: Records simulator screen via `xcrun simctl io recordVideo` during test run, saves `.mp4`
+- Android: Records emulator screen via `adb shell screenrecord` during test run, saves `.mp4`
+- Output: `artifacts/videos/ios/ui-test-recording.mp4` and `artifacts/videos/android/ui-test-recording.mp4`
+- Attach these mp4 files to the PR for visual parity review
+- Recording is required — do not skip unless the platform toolchain is unavailable

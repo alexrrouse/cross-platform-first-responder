@@ -32,7 +32,8 @@ android/app/src/main/java/com/tandem/emt/features/{featureName}/
 - UI test dir: `android/app/src/androidTest/java/com/tandem/emt/features/{featureName}/`
 - UI test file: `{Feature}UITest.kt` (singular "Test")
 - **Test tags: MUST use `Modifier.testTag("tag_name")` on every testable element** — required for UI test parity with iOS `.accessibilityIdentifier()`
-- UI test video: Gradle managed device recordings or `adb screenrecord`
+- UI test video: Run `./tools/ci/record-ui-tests.sh android` — records emulator via `adb screenrecord`, saves mp4 to `artifacts/videos/android/`
+- **LazyColumn testing:** Use `onNodeWithTag("list_tag").performScrollToNode(hasTestTag("item_tag"))` — `performScrollTo()` doesn't work for items not yet composed in lazy lists
 
 ## Design Tokens
 - Never hardcode colors — use tokens from `Color.kt`

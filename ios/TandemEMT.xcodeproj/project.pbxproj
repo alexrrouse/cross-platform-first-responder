@@ -14,6 +14,15 @@
 		A10000010000000000000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000005 /* Assets.xcassets */; };
 		A10000010000000000000010 /* TandemEMTTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000010 /* TandemEMTTests.swift */; };
 		A10000010000000000000020 /* TandemEMTUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000020 /* TandemEMTUITests.swift */; };
+		B10000010000000000000001 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000010000000000000001 /* AppColors.swift */; };
+		B10000010000000000000002 /* IncidentReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000010000000000000002 /* IncidentReport.swift */; };
+		B10000010000000000000003 /* IncidentReportRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000010000000000000003 /* IncidentReportRepository.swift */; };
+		B10000010000000000000004 /* IncidentReportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000010000000000000004 /* IncidentReportViewModel.swift */; };
+		B10000010000000000000005 /* IncidentReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000010000000000000005 /* IncidentReportView.swift */; };
+		B10000010000000000000010 /* IncidentReportViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000010000000000000010 /* IncidentReportViewModelTests.swift */; };
+		B10000010000000000000020 /* IncidentReportUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000010000000000000020 /* IncidentReportUITests.swift */; };
+		C10000010000000000000001 /* IncidentListSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20000010000000000000001 /* IncidentListSnapshotTests.swift */; };
+		D30000010000000000000001 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = D20000010000000000000001 /* SnapshotTesting */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +56,14 @@
 		A60000010000000000000001 /* TandemEMT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TandemEMT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A60000010000000000000002 /* TandemEMTTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TandemEMTTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A60000010000000000000003 /* TandemEMTUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TandemEMTUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B20000010000000000000001 /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
+		B20000010000000000000002 /* IncidentReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentReport.swift; sourceTree = "<group>"; };
+		B20000010000000000000003 /* IncidentReportRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentReportRepository.swift; sourceTree = "<group>"; };
+		B20000010000000000000004 /* IncidentReportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentReportViewModel.swift; sourceTree = "<group>"; };
+		B20000010000000000000005 /* IncidentReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentReportView.swift; sourceTree = "<group>"; };
+		B20000010000000000000010 /* IncidentReportViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentReportViewModelTests.swift; sourceTree = "<group>"; };
+		B20000010000000000000020 /* IncidentReportUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentReportUITests.swift; sourceTree = "<group>"; };
+		C20000010000000000000001 /* IncidentListSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentListSnapshotTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D30000010000000000000001 /* SnapshotTesting in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +137,7 @@
 			children = (
 				A80000010000000000000005 /* Navigation */,
 				A80000010000000000000006 /* Networking */,
+				B80000010000000000000001 /* Theme */,
 				A80000010000000000000030 /* Models */,
 				A80000010000000000000031 /* Extensions */,
 			);
@@ -141,6 +160,14 @@
 			path = Networking;
 			sourceTree = "<group>";
 		};
+		B80000010000000000000001 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				B20000010000000000000001 /* AppColors.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
 		A80000010000000000000030 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -158,8 +185,44 @@
 		A80000010000000000000009 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				B80000010000000000000010 /* IncidentReport */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		B80000010000000000000010 /* IncidentReport */ = {
+			isa = PBXGroup;
+			children = (
+				B80000010000000000000011 /* Models */,
+				B80000010000000000000012 /* ViewModels */,
+				B80000010000000000000013 /* Views */,
+				B20000010000000000000003 /* IncidentReportRepository.swift */,
+			);
+			path = IncidentReport;
+			sourceTree = "<group>";
+		};
+		B80000010000000000000011 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B20000010000000000000002 /* IncidentReport.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		B80000010000000000000012 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				B20000010000000000000004 /* IncidentReportViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		B80000010000000000000013 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B20000010000000000000005 /* IncidentReportView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		A80000010000000000000008 /* Resources */ = {
@@ -176,8 +239,18 @@
 			children = (
 				A20000010000000000000010 /* TandemEMTTests.swift */,
 				A20000010000000000000011 /* Info.plist */,
+				B80000010000000000000020 /* IncidentReportTests */,
+				C20000010000000000000001 /* IncidentListSnapshotTests.swift */,
 			);
 			path = TandemEMTTests;
+			sourceTree = "<group>";
+		};
+		B80000010000000000000020 /* IncidentReportTests */ = {
+			isa = PBXGroup;
+			children = (
+				B20000010000000000000010 /* IncidentReportViewModelTests.swift */,
+			);
+			path = IncidentReportTests;
 			sourceTree = "<group>";
 		};
 		A80000010000000000000020 /* TandemEMTUITests */ = {
@@ -185,6 +258,7 @@
 			children = (
 				A20000010000000000000020 /* TandemEMTUITests.swift */,
 				A20000010000000000000021 /* Info.plist */,
+				B20000010000000000000020 /* IncidentReportUITests.swift */,
 			);
 			path = TandemEMTUITests;
 			sourceTree = "<group>";
@@ -222,6 +296,9 @@
 				AD0000010000000000000001 /* PBXTargetDependency */,
 			);
 			name = TandemEMTTests;
+			packageProductDependencies = (
+				D20000010000000000000001 /* SnapshotTesting */,
+			);
 			productName = TandemEMTTests;
 			productReference = A60000010000000000000002 /* TandemEMTTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -275,6 +352,9 @@
 				Base,
 			);
 			mainGroup = A80000010000000000000001;
+			packageReferences = (
+				D10000010000000000000001 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+			);
 			productRefGroup = A80000010000000000000099 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -306,6 +386,11 @@
 				A10000010000000000000002 /* ContentView.swift in Sources */,
 				A10000010000000000000003 /* AppRouter.swift in Sources */,
 				A10000010000000000000004 /* APIClient.swift in Sources */,
+				B10000010000000000000001 /* AppColors.swift in Sources */,
+				B10000010000000000000002 /* IncidentReport.swift in Sources */,
+				B10000010000000000000003 /* IncidentReportRepository.swift in Sources */,
+				B10000010000000000000004 /* IncidentReportViewModel.swift in Sources */,
+				B10000010000000000000005 /* IncidentReportView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,6 +399,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10000010000000000000010 /* TandemEMTTests.swift in Sources */,
+				B10000010000000000000010 /* IncidentReportViewModelTests.swift in Sources */,
+				C10000010000000000000001 /* IncidentListSnapshotTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,6 +409,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10000010000000000000020 /* TandemEMTUITests.swift in Sources */,
+				B10000010000000000000020 /* IncidentReportUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -654,6 +742,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D10000010000000000000001 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.17.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D20000010000000000000001 /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D10000010000000000000001 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A40000010000000000000001 /* Project object */;
 }
