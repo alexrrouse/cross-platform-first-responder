@@ -1,9 +1,3 @@
----
-paths:
-  - "specs/**"
-  - "tools/**"
----
-
 # Code Generation & Specs
 
 ## Code Generation

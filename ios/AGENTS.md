@@ -1,8 +1,3 @@
----
-paths:
-  - "ios/**"
----
-
 # iOS Conventions (Swift / SwiftUI)
 
 ## File Organization

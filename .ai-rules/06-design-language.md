@@ -1,12 +1,3 @@
----
-paths:
-  - "ios/**/Views/**"
-  - "ios/**/Theme/**"
-  - "android/**/ui/**"
-  - "android/**/theme/**"
-  - "specs/design/**"
----
-
 # Design Language Rules
 
 The shared design language is defined in `specs/design/design-language.md`.

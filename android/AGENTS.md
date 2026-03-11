@@ -1,8 +1,3 @@
----
-paths:
-  - "android/**"
----
-
 # Android Conventions (Kotlin / Jetpack Compose)
 
 ## File Organization

@@ -1,11 +1,3 @@
----
-paths:
-  - "**/Tests/**"
-  - "**/tests/**"
-  - "**/*Test*"
-  - "specs/test-contracts/**"
----
-
 # Testing Rules
 
 ## Test Contracts
