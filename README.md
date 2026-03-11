@@ -1,3 +1,6 @@
+# POC WIP
+
+
 # Tandem EMT
 
 Dual-native mobile app for EMT/Fire response. iOS (Swift/SwiftUI) and Android (Kotlin/Jetpack Compose) developed simultaneously with automated parity enforcement at every layer.
